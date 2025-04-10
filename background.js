@@ -89,19 +89,32 @@ const openWithVScodeDev = (repoUrl) => {
 
 // Function to handle opening a specific file URL in VS Code
 function openFileInVSCode(fileUrl) {
+    // Use URL constructor for easier parsing of path and hash
+    const parsedUrl = new URL(fileUrl);
     const urlPattern = /^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/blob\/([^\/]+)\/(.+)$/;
-    const match = fileUrl.match(urlPattern);
+    // Match against the URL without the hash
+    const match = (parsedUrl.origin + parsedUrl.pathname).match(urlPattern);
 
     if (!match) {
         console.warn("Open in VSCode command: Not a file blob URL.", fileUrl);
         return; // Not a file page or pattern mismatch
     }
 
-    const [, org, repo, /* branch */ , filePath] = match;
+    // Extract org, repo, and filePath from the pathname match
+    const [, org, repo, /* branch */ , rawFilePath] = match;
+    // filePath should not include the hash, which is handled separately
+    const filePath = rawFilePath;
 
     if (!repo || !filePath) {
         console.error("Open in VSCode command: Could not parse repo or file path from URL:", fileUrl);
         return;
+    }
+
+    // Extract line number from hash (#L<start> or #L<start>-L<end>)
+    let lineNumber = '';
+    const hashMatch = parsedUrl.hash.match(/^#L(\d+)/);
+    if (hashMatch && hashMatch[1]) {
+        lineNumber = `:${hashMatch[1]}`; // Format as :line
     }
 
     // Fetch base path from storage with a default value
@@ -116,7 +129,7 @@ function openFileInVSCode(fileUrl) {
 
         // Ensure base path ends with a slash
         const basePath = storedBasePath.trim().endsWith('/') ? storedBasePath.trim() : storedBasePath.trim() + '/';
-        const vscodeUri = `vscode://file/${basePath}${org}/${repo}/${filePath}`;
+        const vscodeUri = `vscode://file/${basePath}${org}/${repo}/${filePath}${lineNumber}`; // Append line number if found
 
         console.log(`Attempting to open VS Code URI: ${vscodeUri}`);
 
