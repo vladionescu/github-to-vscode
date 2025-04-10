@@ -1,23 +1,8 @@
 // Base path is now configured via the options page and stored in chrome.storage.sync
 
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.contextMenus.create({
-        title: `Open with vscode.dev`,
-        id: 'open-with-vscode-dev',
-        documentUrlPatterns: ["https://github.com/*/*"],
-    })
-})
 
 chrome.action.onClicked.addListener(() => {
     chrome.runtime.openOptionsPage()
-})
-
-chrome.contextMenus.onClicked.addListener(() => {
-    getCurrentTab()
-        .then(tab => {
-            openWithVScodeDev(tab.url)
-        })
-        .catch(err => console.error(err))
 })
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {

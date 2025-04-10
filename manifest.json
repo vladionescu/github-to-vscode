@@ -32,7 +32,7 @@
       "description": "Open current GitHub file in VSCode"
     }
   },
-  "permissions": ["tabs", "contextMenus", "scripting", "storage"],
+  "permissions": ["tabs", "scripting", "storage"],
   "host_permissions": ["*://github.com/*"],
   "content_scripts": [
     {
