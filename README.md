@@ -32,7 +32,7 @@ This extension assumes files exist at `{basepath}/{org}/{repo}/{filepath}` where
 
 ## How to install
 
-You can install github-to-vscode directly from Chrome's Web Store by clicking [here](https://chrome.google.com/webstore/detail/github-to-vscode/lcajicegcfldjbnodelkdmgajajdcgjd).
+You can install github-to-local-vscode [directly from Chrome's Web Store](https://chrome.google.com/webstore/detail/github-to-local-vscode/bkcmnjhiempdiihdhlifcagkmkdjjlhk).
 
 Otherwise, you can manually install the extension by following the instructions below:
 
