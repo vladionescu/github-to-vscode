@@ -1,4 +1,4 @@
-const VSC_BASE_PATH = '/Users/user/workspace/'; // Hardcoded base path
+// Base path is now configured via the options page and stored in chrome.storage.sync
 
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
@@ -6,6 +6,10 @@ chrome.runtime.onInstalled.addListener(() => {
         id: 'open-with-vscode-dev',
         documentUrlPatterns: ["https://github.com/*/*"],
     })
+})
+
+chrome.action.onClicked.addListener(() => {
+    chrome.runtime.openOptionsPage()
 })
 
 chrome.contextMenus.onClicked.addListener(() => {
@@ -100,13 +104,26 @@ function openFileInVSCode(fileUrl) {
         return;
     }
 
-    // Ensure base path ends with a slash
-    const basePath = VSC_BASE_PATH.endsWith('/') ? VSC_BASE_PATH : VSC_BASE_PATH + '/';
-    const vscodeUri = `vscode://file/${basePath}${org}/${repo}/${filePath}`;
+    // Fetch base path from storage with a default value
+    chrome.storage.sync.get({ vscBasePath: '/Users/user/workspace/' }, (items) => {
+        let storedBasePath = items.vscBasePath;
 
-    // Open the VS Code URI link
-    chrome.tabs.create({
-        url: vscodeUri
+        // Use default if stored path is invalid or empty
+        if (!storedBasePath || typeof storedBasePath !== 'string' || storedBasePath.trim() === '') {
+             console.warn("Open in VSCode command: Invalid or missing base path in storage. Using default '/Users/user/workspace/'.");
+             storedBasePath = '/Users/user/workspace/'; // Fallback default
+        }
+
+        // Ensure base path ends with a slash
+        const basePath = storedBasePath.trim().endsWith('/') ? storedBasePath.trim() : storedBasePath.trim() + '/';
+        const vscodeUri = `vscode://file/${basePath}${org}/${repo}/${filePath}`;
+
+        console.log(`Attempting to open VS Code URI: ${vscodeUri}`);
+
+        // Open the VS Code URI link
+        chrome.tabs.create({
+            url: vscodeUri
+        });
     });
 }
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub to VSCode Options</title>
+    <style>
+        body { font-family: sans-serif; padding: 10px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="text"] { width: 400px; margin-bottom: 10px; }
+        button { padding: 8px 15px; }
+        #status { margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>GitHub to VSCode Options</h1>
+    <label for="basePath">Code Base Path (you clone GitHub repos here):</label>
+    <input type="text" id="basePath" placeholder="e.g., /Users/yourname/workspace/">
+    <button id="save">Save</button>
+    <div id="status"></div>
+
+    <script src="options.js"></script>
+</body>
+</html>
