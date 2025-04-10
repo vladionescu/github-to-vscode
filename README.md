@@ -2,23 +2,32 @@
   <img width="128" src="https://i.imgur.com/t3MTsVm.png">
 </p>
 
-# GitHub to VSCode
+# GitHub to Local VSCode
 
 Chrome extension to quickly open GitHub repos/files inside a locally installed VSCode.
 
 ## How to use
 
-Navigate to any github repository and click on the greenish "Code" button on the repo's main page. A new option should be visible with the title "Clone in vscode". Click it and the repo will be cloned directly to vscode!
+Click the extension icon in your toolbar to open the options popup. Set your code base path here. This is where you clone repos locally.
 
-Another option is to right click on the repository's page and select "Open with vscode.dev". A new tab will open on the vscode.dev page for the specified repository, where you can browse the code like you would with your local projects.
+This extension assumes files exist at `{basepath}/{org}/{repo}/{filepath}` where basepath is what you set, and the rest are from the current GitHub URL. As a result, there is a limitation where your local clones must follow the dir structure `{org}/{repo}`.
 
-<p align="center">
-  <img src="https://i.imgur.com/PbzhXRd.gif">
-  <img src="https://i.imgur.com/x0dBxm9.gif">
-</p>
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="https://i.imgur.com/VNV30OX.png">
+    </td>
+    <td width="50%" valign="middle">
+      <img src="https://i.imgur.com/NVJqQ6s.png">
+      <br/>
+      <img src="https://i.imgur.com/ADfwZ4s.png">
+    </td>
+  </tr>
+</table>
 
 ## Keyboard shortcuts:
 
+- Open current file in VSCode: `Ctrl/Command + Comma (,)`
 - Clone in VSCode: `Ctrl/Command + Shift + Down Arrow`
 
 ## How to install
