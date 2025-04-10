@@ -1,3 +1,5 @@
+const VSC_BASE_PATH = '/Users/user/workspace/'; // Hardcoded base path
+
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         title: `Open with vscode.dev`,
@@ -46,12 +48,21 @@ chrome.commands.onCommand.addListener((command) => {
 
                 repoUrl += '.git'
 
-                cloneRepo(repoUrl)
+                cloneRepo(repoUrl);
+            }
+
+            if (command === "open-file-in-vscode") {
+                // Check specifically for blob URLs here, as the command should only work on file pages
+                if (tab.url.includes('/blob/')) {
+                     openFileInVSCode(tab.url);
+                } else {
+                    console.log("Open in VSCode command: Not on a file page.");
+                }
             }
         })
-        .catch(err => console.error(err))
+        .catch(err => console.error(err));
 
-})
+});
 
 const getCurrentTab = async () => {
     const queryOptions = { active: true, currentWindow: true }
@@ -69,11 +80,50 @@ const isGithubPage = (url) => {
 const openWithVScodeDev = (repoUrl) => {
     chrome.tabs.create({
         url: `https://vscode.dev/${repoUrl}`
-    })
+    });
+}
+
+// Function to handle opening a specific file URL in VS Code
+function openFileInVSCode(fileUrl) {
+    const urlPattern = /^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/blob\/([^\/]+)\/(.+)$/;
+    const match = fileUrl.match(urlPattern);
+
+    if (!match) {
+        console.warn("Open in VSCode command: Not a file blob URL.", fileUrl);
+        return; // Not a file page or pattern mismatch
+    }
+
+    const [, org, repo, /* branch */ , filePath] = match;
+
+    if (!repo || !filePath) {
+        console.error("Open in VSCode command: Could not parse repo or file path from URL:", fileUrl);
+        return;
+    }
+
+    // Ensure base path ends with a slash
+    const basePath = VSC_BASE_PATH.endsWith('/') ? VSC_BASE_PATH : VSC_BASE_PATH + '/';
+    const vscodeUri = `vscode://file/${basePath}${org}/${repo}/${filePath}`;
+
+    // Open the VS Code URI link
+    chrome.tabs.create({
+        url: vscodeUri
+    });
 }
 
 const cloneRepo = (repoUrl) => {
     chrome.tabs.create({
         url: `vscode://vscode.git/clone?url=${repoUrl}`
-    })
+    });
 }
+
+// Listen for messages from content scripts
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "openInVSCode" && message.url) {
+        console.log("Background script received openInVSCode message for URL:", message.url);
+        openFileInVSCode(message.url);
+        // Optional: send a response back if needed, though not required here
+        // sendResponse({ status: "success" });
+        return true; // Indicates you might send a response asynchronously (good practice)
+    }
+    // Handle other potential messages here if needed
+});

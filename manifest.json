@@ -16,7 +16,14 @@
         "default": "Ctrl+Shift+Down",
         "mac": "Command+Shift+Down"
       },
-      "description": "Clone a Github repo directly to vscode"
+      "description": "Clone a Github repo directly to VSCode"
+    },
+    "open-file-in-vscode": {
+      "suggested_key": {
+        "default": "Ctrl+Comma",
+        "mac": "Command+Comma"
+      },
+      "description": "Open current GitHub file in VSCode"
     }
   },
   "permissions": ["tabs", "contextMenus", "scripting"],
