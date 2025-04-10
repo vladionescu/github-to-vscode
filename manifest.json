@@ -1,6 +1,6 @@
 {
-  "name": "Github to vscode",
-  "description": "Quickly open github repos with vscode.dev or clone a repo directly to vscode.",
+  "name": "GitHub to VSCode",
+  "description": "Quickly open GitHub repos/files inside a locally installed VSCode.",
   "version": "1.1.3",
   "manifest_version": 3,
   "icons": {
@@ -17,13 +17,6 @@
         "mac": "Command+Shift+Down"
       },
       "description": "Clone a Github repo directly to vscode"
-    },
-    "open-with-vscodedev": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Up",
-        "mac": "Command+Shift+Up"
-      },
-      "description": "Quickly open Github repos with vscode.dev"
     }
   },
   "permissions": ["tabs", "contextMenus", "scripting"],
